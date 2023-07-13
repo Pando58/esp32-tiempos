@@ -1,5 +1,8 @@
 #include "WiFi.h"
 #include "time.h"
+#include "ESPAsyncWebServer.h"
+
+#include "HtmlIndex.h"
 
 String ssid = "Wifi4us";
 String pswd = "TLWA830RE";
@@ -8,8 +11,8 @@ const char* ntp_server = "pool.ntp.org";
 const long gmt_offset_sec = -6 * 3600;
 const int daylight_offset_sec = 0;
 
+AsyncWebServer server(80);
 struct tm tm_update_time;
-
 struct tm tm_now;
 
 void setup() {
@@ -31,6 +34,17 @@ void setup() {
 
   Serial.println("");
   Serial.println("Conectado a la red " + ssid + "\n");
+  Serial.println("IP: " + WiFi.localIP().toString() + "\n");
+
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(200, "text/html", HTML_INDEX);
+  });
+
+  server.on("/tiempos", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(200, "application/json", "{\"val\":" + String(random(100, 200)) + "}");
+  });
+
+  server.begin();
 
   updateSystemTime();
 }
