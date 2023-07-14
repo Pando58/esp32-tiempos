@@ -115,6 +115,8 @@ void setup() {
 }
 
 void loop() {
+  unsigned long start = millis();
+
   time_t now = time(NULL);
   tm_now = *localtime(&now);
 
@@ -125,7 +127,7 @@ void loop() {
 
   Serial.println(&tm_now);
 
-  delay(1000);
+  delay(1000 - (millis() - start));
 }
 
 void updateSystemTime() {
