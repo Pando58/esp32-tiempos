@@ -4,12 +4,18 @@
 
 #include "HtmlIndex.h"
 
+#define n_dias 7
+#define n_tiempos 10
+#define n_salidas 3
+
 String ssid = "Wifi4us";
 String pswd = "TLWA830RE";
 
 const char* ntp_server = "pool.ntp.org";
 const long gmt_offset_sec = -6 * 3600;
 const int daylight_offset_sec = 0;
+
+int tabla_tiempos[n_dias][n_tiempos][2 + n_salidas];
 
 AsyncWebServer server(80);
 struct tm tm_update_time;
@@ -41,7 +47,39 @@ void setup() {
   });
 
   server.on("/tiempos", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "application/json", "{\"val\":" + String(random(100, 200)) + "}");
+    String str_tiempos = "[";
+
+    for (int d = 0; d < n_dias; d++) {
+      str_tiempos += "[";
+
+      for (int t = 0; t < n_tiempos; t++) {
+        str_tiempos += "{\"hora\":" + String(tabla_tiempos[d][t][0]) + ",\"minuto\":" + String(tabla_tiempos[d][t][1]) + ",\"salidas\":" + "[";
+
+        for (int s = 0; s < n_salidas; s++) {
+          str_tiempos += String(tabla_tiempos[d][t][2 + s]);
+
+          if (s < n_salidas - 1) {
+            str_tiempos += ",";
+          }
+        }
+
+        str_tiempos += "]}";
+
+        if (t < n_tiempos - 1) {
+          str_tiempos += ",";
+        }
+      }
+
+      str_tiempos += "]";
+
+      if (d < n_dias - 1) {
+        str_tiempos += ",";
+      }
+    }
+
+    str_tiempos += "]";
+
+    request->send(200, "application/json", str_tiempos);
   });
 
   server.begin();

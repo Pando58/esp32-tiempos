@@ -5,17 +5,16 @@ const char HTML_INDEX[] PROGMEM = R"=====(
     <title>Tiempos ESP32</title>
   </head>
   <body>
-    <h1>val: <span></span></h1>
+    <pre style="font-family: monospace"></pre>
   </body>
   <script>
-    const txt = document.querySelector("h1 span");
+    const txt = document.querySelector("pre");
 
     fetch("/tiempos")
       .then(async (response) => {
         const data = await response.json();
 
-        console.log(data);
-        txt.innerHTML = data.val;
+        txt.textContent = JSON.stringify(data, null, 2);
       });
   </script>
 </html>
