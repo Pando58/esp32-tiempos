@@ -1,12 +1,21 @@
 #include "WiFi.h"
 #include "time.h"
 #include "ESPAsyncWebServer.h"
+#include "SPI.h"
+#include "Wire.h"
+#include "Adafruit_GFX.h"
+#include "Adafruit_SSD1306.h"
 
 #include "HtmlIndex.h"
 
 #define n_dias 7
 #define n_tiempos 10
 #define n_salidas 3
+
+#define OLED_W 128
+#define OLED_H 64
+#define OLED_RESET -1
+#define OLED_SCR_ADDR 0x3C
 
 String ssid = "Wifi4us";
 String pswd = "TLWA830RE";
@@ -20,6 +29,8 @@ int tabla_tiempos[n_dias][n_tiempos][2 + n_salidas];
 AsyncWebServer server(80);
 struct tm tm_update_time;
 struct tm tm_now;
+String ip;
+Adafruit_SSD1306 display(OLED_W, OLED_H, &Wire, OLED_RESET);
 
 void setup() {
   tm_update_time.tm_hour = 6;
@@ -28,8 +39,20 @@ void setup() {
 
   Serial.begin(115200);
 
+  if(!display.begin(SSD1306_SWITCHCAPVCC, OLED_SCR_ADDR)) { // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;);
+  }
+
+  display.setTextColor(SSD1306_WHITE);
+  display.setTextSize(1);
+
   Serial.println("");
   Serial.print("Conectando a red WiFi");
+  display.clearDisplay();
+  display.setCursor(0, 30);
+  display.println(F("Conectando a WiFi..."));
+  display.display();
 
   WiFi.begin(ssid, pswd);
 
@@ -38,9 +61,13 @@ void setup() {
     delay(500);
   }
 
+  ip = WiFi.localIP().toString();
+
   Serial.println("");
   Serial.println("Conectado a la red " + ssid + "\n");
-  Serial.println("IP: " + WiFi.localIP().toString() + "\n");
+  Serial.println("IP: " + ip + "\n");
+  display.clearDisplay();
+  oledPrintNetworkInfo();
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "text/html", HTML_INDEX);
@@ -93,13 +120,22 @@ void loop() {
 
   checkTimeUpdate();
 
+  oledPrintTime();
+  oledPrintNetworkInfo();
+
   Serial.println(&tm_now);
 
   delay(1000);
 }
 
 void updateSystemTime() {
+  display.fillRect(0, 56, 128, 10, SSD1306_BLACK);
+  display.setCursor(0, 56);
+  display.println(F("Actualizando hora..."));
+  display.display();
+
   Serial.println("Actualizando hora...");
+
   configTime(gmt_offset_sec, daylight_offset_sec, ntp_server);
 
   time_t now;
@@ -112,7 +148,6 @@ void updateSystemTime() {
     }
   }
 
-
   Serial.println("Hora actualizada\n");
 }
 
@@ -124,4 +159,25 @@ void checkTimeUpdate() {
   ) {
     updateSystemTime();
   }
+}
+
+void oledPrintNetworkInfo() {
+  display.setCursor(0, 0);
+  display.println(F("Conectado"));
+  display.setCursor(0, 12);
+  display.println(F(("SSID: " + ssid).c_str()));
+  display.setCursor(0, 38);
+  display.println(F(("IP: " + ip).c_str()));
+  display.display();
+}
+
+void oledPrintTime() {
+  String h = (tm_now.tm_hour < 10 ? "0" : "") + String(tm_now.tm_hour);
+  String m = (tm_now.tm_min < 10 ? "0" : "") + String(tm_now.tm_min);
+  String s = (tm_now.tm_sec < 10 ? "0" : "") + String(tm_now.tm_sec);
+
+  display.fillRect(0, 56, 128, 10, SSD1306_BLACK);
+  display.setCursor(41, 56);
+  display.println(F((h + ":" + m + ":" + s).c_str()));
+  display.display();
 }
