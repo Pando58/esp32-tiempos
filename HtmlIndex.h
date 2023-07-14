@@ -1,21 +1,23 @@
 const char HTML_INDEX[] PROGMEM = R"=====(
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Tiempos ESP32</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Svelte + TS</title>
+    <script type="module" crossorigin>
+var D=Object.defineProperty;var G=(e,t,n)=>t in e?D(e,t,{enumerable:!0,configurable:!0,writable:!0,value:n}):e[t]=n;var N=(e,t,n)=>(G(e,typeof t!="symbol"?t+"":t,n),n);(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))r(s);new MutationObserver(s=>{for(const c of s)if(c.type==="childList")for(const u of c.addedNodes)u.tagName==="LINK"&&u.rel==="modulepreload"&&r(u)}).observe(document,{childList:!0,subtree:!0});function n(s){const c={};return s.integrity&&(c.integrity=s.integrity),s.referrerPolicy&&(c.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?c.credentials="include":s.crossOrigin==="anonymous"?c.credentials="omit":c.credentials="same-origin",c}function r(s){if(s.ep)return;s.ep=!0;const c=n(s);fetch(s.href,c)}})();function x(){}function R(e){return e()}function B(){return Object.create(null)}function E(e){e.forEach(R)}function T(e){return typeof e=="function"}function H(e,t){return e!=e?t==t:e!==t||e&&typeof e=="object"||typeof e=="function"}function J(e){return Object.keys(e).length===0}function l(e,t){e.appendChild(t)}function Q(e,t,n){e.insertBefore(t,n||null)}function U(e){e.parentNode&&e.parentNode.removeChild(e)}function d(e){return document.createElement(e)}function O(e){return document.createTextNode(e)}function M(){return O(" ")}function q(e,t,n,r){return e.addEventListener(t,n,r),()=>e.removeEventListener(t,n,r)}function _(e,t,n){n==null?e.removeAttribute(t):e.getAttribute(t)!==n&&e.setAttribute(t,n)}function W(e){return Array.from(e.childNodes)}function A(e,t){t=""+t,e.data!==t&&(e.data=t)}let C;function k(e){C=e}const b=[],F=[];let v=[];const K=[],X=Promise.resolve();let S=!1;function Y(){S||(S=!0,X.then(V))}function j(e){v.push(e)}const P=new Set;let $=0;function V(){if($!==0)return;const e=C;do{try{for(;$<b.length;){const t=b[$];$++,k(t),Z(t.$$)}}catch(t){throw b.length=0,$=0,t}for(k(null),b.length=0,$=0;F.length;)F.pop()();for(let t=0;t<v.length;t+=1){const n=v[t];P.has(n)||(P.add(n),n())}v.length=0}while(b.length);for(;K.length;)K.pop()();S=!1,P.clear(),k(e)}function Z(e){if(e.fragment!==null){e.update(),E(e.before_update);const t=e.dirty;e.dirty=[-1],e.fragment&&e.fragment.p(e.ctx,t),e.after_update.forEach(j)}}function ee(e){const t=[],n=[];v.forEach(r=>e.indexOf(r)===-1?t.push(r):n.push(r)),n.forEach(r=>r()),v=t}const te=new Set;function ne(e,t){e&&e.i&&(te.delete(e),e.i(t))}function re(e,t,n){const{fragment:r,after_update:s}=e.$$;r&&r.m(t,n),j(()=>{const c=e.$$.on_mount.map(R).filter(T);e.$$.on_destroy?e.$$.on_destroy.push(...c):E(c),e.$$.on_mount=[]}),s.forEach(j)}function se(e,t){const n=e.$$;n.fragment!==null&&(ee(n.after_update),E(n.on_destroy),n.fragment&&n.fragment.d(t),n.on_destroy=n.fragment=null,n.ctx=[])}function ce(e,t){e.$$.dirty[0]===-1&&(b.push(e),Y(),e.$$.dirty.fill(0)),e.$$.dirty[t/31|0]|=1<<t%31}function oe(e,t,n,r,s,c,u,h=[-1]){const f=C;k(e);const o=e.$$={fragment:null,ctx:[],props:c,update:x,not_equal:s,bound:B(),on_mount:[],on_destroy:[],on_disconnect:[],before_update:[],after_update:[],context:new Map(t.context||(f?f.$$.context:[])),callbacks:B(),dirty:h,skip_bound:!1,root:t.target||f.$$.root};u&&u(o.root);let y=!1;if(o.ctx=n?n(e,t.props||{},(i,a,...p)=>{const m=p.length?p[0]:a;return o.ctx&&s(o.ctx[i],o.ctx[i]=m)&&(!o.skip_bound&&o.bound[i]&&o.bound[i](m),y&&ce(e,i)),a}):[],o.update(),y=!0,E(o.before_update),o.fragment=r?r(o.ctx):!1,t.target){if(t.hydrate){const i=W(t.target);o.fragment&&o.fragment.l(i),i.forEach(U)}else o.fragment&&o.fragment.c();t.intro&&ne(e.$$.fragment),re(e,t.target,t.anchor),V()}k(f)}class le{constructor(){N(this,"$$");N(this,"$$set")}$destroy(){se(this,1),this.$destroy=x}$on(t,n){if(!T(n))return x;const r=this.$$.callbacks[t]||(this.$$.callbacks[t]=[]);return r.push(n),()=>{const s=r.indexOf(n);s!==-1&&r.splice(s,1)}}$set(t){this.$$set&&!J(t)&&(this.$$.skip_bound=!0,this.$$set(t),this.$$.skip_bound=!1)}}const ie="4";typeof window<"u"&&(window.__svelte||(window.__svelte={v:new Set})).v.add(ie);function ue(e){let t,n,r,s,c,u,h,f,o=e[0]-1+"",y,i,a,p,m=e[0]+1+"",z,L,I;return{c(){t=d("main"),n=d("div"),r=d("div"),s=d("h2"),c=O(e[0]),u=M(),h=d("button"),f=d("span"),y=O(o),i=M(),a=d("button"),p=d("span"),z=O(m),_(s,"class","svelte-y62csz"),_(f,"class","svelte-y62csz"),_(h,"class","svelte-y62csz"),_(p,"class","svelte-y62csz"),_(a,"class","svelte-y62csz"),_(r,"class","svelte-y62csz"),_(n,"class","container svelte-y62csz"),_(t,"class","svelte-y62csz")},m(g,w){Q(g,t,w),l(t,n),l(n,r),l(r,s),l(s,c),l(r,u),l(r,h),l(h,f),l(f,y),l(r,i),l(r,a),l(a,p),l(p,z),L||(I=[q(h,"click",e[1]),q(a,"click",e[2])],L=!0)},p(g,[w]){w&1&&A(c,g[0]),w&1&&o!==(o=g[0]-1+"")&&A(y,o),w&1&&m!==(m=g[0]+1+"")&&A(z,m)},i:x,o:x,d(g){g&&U(t),L=!1,E(I)}}}function fe(e,t,n){let r=0;return[r,()=>n(0,r--,r),()=>n(0,r++,r)]}class ae extends le{constructor(t){super(),oe(this,t,fe,ue,H,{})}}new ae({target:document.getElementById("app")});
+
+</script>
+    <style>
+*{margin:0;padding:0;box-sizing:border-box}.svelte-y62csz.svelte-y62csz{font-family:monospace;font-size:2rem;font-weight:600}.container.svelte-y62csz.svelte-y62csz{height:100vh;display:grid;place-items:center}.container.svelte-y62csz div.svelte-y62csz{text-align:center}button.svelte-y62csz.svelte-y62csz{padding:.2rem}button.svelte-y62csz span.svelte-y62csz{display:inline-block;min-width:2ch}
+
+</style>
   </head>
   <body>
-    <pre style="font-family: monospace"></pre>
+    <div id="app"></div>
+    
   </body>
-  <script>
-    const txt = document.querySelector("pre");
-
-    fetch("/tiempos")
-      .then(async (response) => {
-        const data = await response.json();
-
-        txt.textContent = JSON.stringify(data, null, 2);
-      });
-  </script>
 </html>
 )=====";
