@@ -21,6 +21,33 @@
 
   let selectedTab = 0;
   let copyingId = -1;
+
+  fetch("/tiempos")
+    .then(async (res) => {
+      const data: {
+        hora: number;
+        minuto: number;
+        salidas: boolean[];
+      }[][] = await res.json();
+
+      tablaTiempos = data.map(
+        (i) =>
+          new Map(
+            i
+              .filter(({ hora }) => hora !== -1)
+              .map(({ hora, minuto, salidas }) => {
+                let k = `${hora.toString().padStart(2, "0")}:${minuto
+                  .toString()
+                  .padStart(2, "0")}`;
+
+                return [k, salidas];
+              })
+          )
+      );
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 </script>
 
 <main>

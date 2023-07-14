@@ -33,6 +33,12 @@ String ip;
 Adafruit_SSD1306 display(OLED_W, OLED_H, &Wire, OLED_RESET);
 
 void setup() {
+  for (int i = 0; i < n_dias; i++) {
+    for (int j = 0; j < n_tiempos; j++) {
+      tabla_tiempos[i][j][0] = -1;
+    }
+  }
+
   tm_update_time.tm_hour = 6;
   tm_update_time.tm_min = 0;
   tm_update_time.tm_sec = 0;
@@ -83,7 +89,7 @@ void setup() {
         str_tiempos += "{\"hora\":" + String(tabla_tiempos[d][t][0]) + ",\"minuto\":" + String(tabla_tiempos[d][t][1]) + ",\"salidas\":" + "[";
 
         for (int s = 0; s < n_salidas; s++) {
-          str_tiempos += String(tabla_tiempos[d][t][2 + s]);
+          str_tiempos += tabla_tiempos[d][t][2 + s] == 1 ? "true" : "false";
 
           if (s < n_salidas - 1) {
             str_tiempos += ",";
