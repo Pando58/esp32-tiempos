@@ -128,6 +128,12 @@ void setup() {
       StaticJsonDocument<capacity> doc;
       deserializeJson(doc, (const char*) data);
 
+      for (int i = 0; i < n_dias; i++) {
+        for (int j = 0; j < n_tiempos; j++) {
+          tabla_tiempos[i][j][0] = -1;
+        }
+      }
+
       JsonArray arr_i = doc.as<JsonArray>();
       for (int i = 0; i < arr_i.size(); i++) {
         JsonVariant arr_j = arr_i[i].as<JsonArray>();
