@@ -13,6 +13,10 @@
 #define n_tiempos 10
 #define n_salidas 3
 
+#define out1 2
+#define out2 0
+#define out3 4
+
 #define OLED_W 128
 #define OLED_H 64
 #define OLED_RESET -1
@@ -34,6 +38,14 @@ String ip;
 Adafruit_SSD1306 display(OLED_W, OLED_H, &Wire, OLED_RESET);
 
 void setup() {
+  pinMode(out1, OUTPUT);
+  pinMode(out2, OUTPUT);
+  pinMode(out3, OUTPUT);
+
+  digitalWrite(out1, LOW);
+  digitalWrite(out2, LOW);
+  digitalWrite(out3, LOW);
+
   for (int i = 0; i < n_dias; i++) {
     for (int j = 0; j < n_tiempos; j++) {
       tabla_tiempos[i][j][0] = -1;
@@ -158,6 +170,36 @@ void loop() {
   tm_now = *localtime(&now);
 
   checkTimeUpdate();
+
+  //
+
+  if (tm_now.tm_sec == 0) {
+    Serial.println("------------");
+
+    int wday = tm_now.tm_wday - 1;
+
+    for (int i = 0; i < n_tiempos; i++) {
+      if (
+        tabla_tiempos[wday][i][0] == tm_now.tm_hour &&
+        tabla_tiempos[wday][i][1] == tm_now.tm_min
+      ) {
+        Serial.print(tabla_tiempos[wday][i][0]);
+        Serial.print(":");
+        Serial.println(tabla_tiempos[wday][i][1]);
+        Serial.println();
+
+        digitalWrite(out1, tabla_tiempos[wday][i][2] == 1 ? HIGH : LOW);
+        digitalWrite(out2, tabla_tiempos[wday][i][3] == 1 ? HIGH : LOW);
+        digitalWrite(out3, tabla_tiempos[wday][i][4] == 1 ? HIGH : LOW);
+
+        break;
+      }
+    }
+
+    Serial.println("------------");
+  }
+
+  //
 
   oledPrintTime();
   oledPrintNetworkInfo();
