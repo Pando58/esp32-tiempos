@@ -77,10 +77,14 @@ void setup() {
   oledPrintNetworkInfo();
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    Serial.println("[GET] /");
+
     request->send(200, "text/html", HTML_INDEX);
   });
 
   server.on("/tiempos", HTTP_GET, [](AsyncWebServerRequest *request) {
+    Serial.println("[GET] /tiempos");
+
     String str_tiempos = "[";
 
     for (int d = 0; d < n_dias; d++) {
@@ -117,6 +121,8 @@ void setup() {
   });
 
   server.on("/tiempos", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+      Serial.println("[POST] /tiempos");
+
       // https://arduinojson.org/v5/assistant/
       const int capacity = (n_dias * n_tiempos) * JSON_ARRAY_SIZE(2 + n_salidas) + JSON_ARRAY_SIZE(n_dias) + n_dias * JSON_ARRAY_SIZE(n_tiempos);
       StaticJsonDocument<capacity> doc;
