@@ -48,22 +48,48 @@
     .catch((err) => {
       console.error(err);
     });
+
+  function onUpload() {
+    fetch("/tiempos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(
+        tablaTiempos.map((i) =>
+          [...i.entries()].map(([k, v]) => {
+            let [h, m] = k.split(":");
+
+            return [parseInt(h), parseInt(m), ...v.map((i) => +i)];
+          })
+        )
+      ),
+    });
+  }
 </script>
 
 <main>
   <div>
     <TabsDias {dias} bind:selected={selectedTab} />
 
-    <button on:click={() => (copyingId = selectedTab)}>Copiar</button>
-    <button
-      on:click={() => {
-        tablaTiempos[selectedTab] = new Map(
-          [...tablaTiempos[copyingId]].map(([k, v]) => [k, [...v]])
-        );
+    <div class="btns">
+      <button on:click={() => (copyingId = selectedTab)}>Copiar</button>
+      <button
+        on:click={() => {
+          if (copyingId === -1) {
+            return;
+          }
 
-        copyingId = -1;
-      }}>Pegar</button
-    >
+          tablaTiempos[selectedTab] = new Map(
+            [...tablaTiempos[copyingId]].map(([k, v]) => [k, [...v]])
+          );
+
+          copyingId = -1;
+        }}>Pegar</button
+      >
+      <div class="flex-1" />
+      <button class="btn-upload" on:click={onUpload}>Subir</button>
+    </div>
     <span>{copyingId !== -1 ? `Copiando: ${dias[copyingId]}` : ""}</span>
 
     <div class="divider" />
@@ -91,16 +117,34 @@
     height: 2rem;
   }
 
-  button {
-    background: #ddd;
-    border: none;
-    padding: 0.3rem 0.4rem;
-    margin: 1rem 0;
+  .flex-1 {
+    flex: 1;
   }
 
   span {
-    margin-left: 0.3rem;
     font-size: 0.8rem;
     text-transform: capitalize;
+    display: block;
+    margin-top: 8px;
+  }
+
+  .btns {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 16px;
+  }
+
+  .btns button {
+    background: #ddd;
+    border: none;
+    padding: 0.3rem 0.4rem;
+    font-weight: 500;
+    border-radius: 4px;
+  }
+
+  .btns .btn-upload {
+    background: #25c45a;
+    color: #fff;
   }
 </style>

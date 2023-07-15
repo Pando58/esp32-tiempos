@@ -1,6 +1,7 @@
 #include "WiFi.h"
 #include "time.h"
 #include "ESPAsyncWebServer.h"
+#include "ArduinoJson.h"
 #include "SPI.h"
 #include "Wire.h"
 #include "Adafruit_GFX.h"
@@ -113,6 +114,26 @@ void setup() {
     str_tiempos += "]";
 
     request->send(200, "application/json", str_tiempos);
+  });
+
+  server.on("/tiempos", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+      // https://arduinojson.org/v5/assistant/
+      const int capacity = (n_dias * n_tiempos) * JSON_ARRAY_SIZE(2 + n_salidas) + JSON_ARRAY_SIZE(n_dias) + n_dias * JSON_ARRAY_SIZE(n_tiempos);
+      StaticJsonDocument<capacity> doc;
+      deserializeJson(doc, (const char*) data);
+
+      JsonArray arr_i = doc.as<JsonArray>();
+      for (int i = 0; i < arr_i.size(); i++) {
+        JsonVariant arr_j = arr_i[i].as<JsonArray>();
+        for (int j = 0; j < arr_j.size(); j++) {
+          JsonVariant arr_k = arr_j[j].as<JsonArray>();
+          for (int k = 0; k < arr_k.size(); k++) {
+            tabla_tiempos[i][j][k] = arr_k[k].as<int>();
+          }
+        }
+      }
+
+      request->send(200);
   });
 
   server.begin();
