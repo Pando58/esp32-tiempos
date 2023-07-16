@@ -171,22 +171,15 @@ void loop() {
 
   checkTimeUpdate();
 
-  //
-
   if (tm_now.tm_sec == 0) {
-    Serial.println("------------");
-
-    int wday = tm_now.tm_wday - 1;
+    int wday = tm_now.tm_wday == 0 ? 6 : tm_now.tm_wday - 1;
 
     for (int i = 0; i < n_tiempos; i++) {
       if (
         tabla_tiempos[wday][i][0] == tm_now.tm_hour &&
         tabla_tiempos[wday][i][1] == tm_now.tm_min
       ) {
-        Serial.print(tabla_tiempos[wday][i][0]);
-        Serial.print(":");
-        Serial.println(tabla_tiempos[wday][i][1]);
-        Serial.println();
+        Serial.println("Evento: " + String(tabla_tiempos[wday][i][0]) + ":" + String(tabla_tiempos[wday][i][1]));
 
         digitalWrite(out1, tabla_tiempos[wday][i][2] == 1 ? HIGH : LOW);
         digitalWrite(out2, tabla_tiempos[wday][i][3] == 1 ? HIGH : LOW);
@@ -195,11 +188,7 @@ void loop() {
         break;
       }
     }
-
-    Serial.println("------------");
   }
-
-  //
 
   oledPrintTime();
   oledPrintNetworkInfo();
