@@ -32,10 +32,13 @@ const int daylight_offset_sec = 0;
 int tabla_tiempos[n_dias][n_tiempos][2 + n_salidas];
 
 AsyncWebServer server(80);
+Adafruit_SSD1306 display(OLED_W, OLED_H, &Wire, OLED_RESET);
 struct tm tm_update_time;
 struct tm tm_now;
 String ip;
-Adafruit_SSD1306 display(OLED_W, OLED_H, &Wire, OLED_RESET);
+int notif_counter = 0;
+int notif_offset_x = 0;
+String notif_msg = "";
 
 void setup() {
   pinMode(out1, OUTPUT);
@@ -157,6 +160,10 @@ void setup() {
         }
       }
 
+      notif_msg = "Datos actualizados";
+      notif_offset_x = 8;
+      notif_counter = 3;
+
       request->send(200);
   });
 
@@ -190,8 +197,21 @@ void loop() {
     }
   }
 
-  oledPrintTime();
-  oledPrintNetworkInfo();
+  if (notif_counter > 0) {
+    display.setCursor(notif_offset_x, 30);
+    display.clearDisplay();
+    display.println(F(notif_msg.c_str()));
+    display.display();
+    notif_counter--;
+  } else {
+    if (notif_counter == 0) {
+      display.clearDisplay();
+      notif_counter = -1;
+    }
+
+    oledPrintNetworkInfo();
+    oledPrintTime();
+  }
 
   Serial.println(&tm_now);
 
