@@ -115,6 +115,35 @@
     width: fit-content;
   }
 
+  input[type="checkbox"] {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid #0003;
+    border-radius: 4px;
+  }
+
+  input[type="checkbox"]:checked {
+    position: relative;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid #0003;
+  }
+
+  input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.6rem;
+    height: 0.6rem;
+    background: hsl(140, 54%, 48%);
+    border: 1px solid #0002;
+    border-radius: 2px;
+  }
+
   input.input-new-entry {
     width: 100%;
   }

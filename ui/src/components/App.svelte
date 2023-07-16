@@ -136,15 +136,33 @@
   }
 
   .btns button {
-    background: #ddd;
+    background: hsl(0, 0%, 90%);
+    -webkit-tap-highlight-color: hsla(140, 68%, 46%, 0.3);
     border: none;
-    padding: 0.3rem 0.4rem;
+    padding: 0.6rem 0.7rem;
     font-weight: 500;
     border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .btns button:hover {
+    background: hsl(0, 0%, 85%);
+  }
+
+  .btns button:active {
+    background: hsl(0, 0%, 80%);
   }
 
   .btns .btn-upload {
-    background: #25c45a;
+    background: hsl(140, 68%, 46%);
     color: #fff;
+  }
+
+  .btns .btn-upload:hover {
+    background: hsl(140, 68%, 42%);
+  }
+
+  .btns .btn-upload:active {
+    background: hsl(140, 68%, 34%);
   }
 </style>
