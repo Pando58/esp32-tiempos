@@ -44,7 +44,7 @@
     const target = e.currentTarget;
     const { value } = target;
 
-    if (entries.has(value)) {
+    if (!value || entries.has(value)) {
       target.value = prev;
       return;
     }
@@ -52,8 +52,6 @@
     entries.set(value, entries.get(prev));
     entries.delete(prev);
     entries = new Map([...entries].sort());
-
-    console.log(entries);
 
     onUpdate(new Map([...entries]));
   }
