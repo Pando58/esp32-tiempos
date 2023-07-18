@@ -87,13 +87,14 @@
     </div>
 
     {#each v as v, i}
-      <input
-        type="checkbox"
-        class="mx-auto"
-        bind:checked={v}
-        on:change={({ currentTarget: { checked } }) =>
-          onOutChange(checked, i, k)}
-      />
+      <div class="grid-center">
+        <input
+          type="checkbox"
+          bind:checked={v}
+          on:change={({ currentTarget: { checked } }) =>
+            onOutChange(checked, i, k)}
+        />
+      </div>
     {/each}
   {/each}
 
@@ -148,6 +149,11 @@
 
   .mx-auto {
     margin: 0 auto;
+  }
+
+  .grid-center {
+    display: grid;
+    place-items: center;
   }
 
   .table {
