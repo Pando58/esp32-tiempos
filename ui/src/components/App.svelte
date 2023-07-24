@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import ModoManual from "./ModoManual.svelte";
   import TablaTiempos from "./TablaTiempos.svelte";
   import TabsDias from "./TabsDias.svelte";
 
@@ -13,7 +15,7 @@
   ];
 
   const n_tiempos = 10;
-  const n_salidas = 3;
+  const salidas = ["bomba", "val1", "val2"];
 
   let tablaTiempos: Map<string, boolean[]>[] = [...Array(dias.length)].map(
     () => new Map()
@@ -21,33 +23,41 @@
 
   let selectedTab = 0;
   let copyingId = -1;
+  let manualEnabled = false;
 
-  fetch("/tiempos")
-    .then(async (res) => {
-      const data: {
-        hora: number;
-        minuto: number;
-        salidas: boolean[];
-      }[][] = await res.json();
+  onMount(() => {
+    fetch("/tiempos")
+      .then(async (res) => {
+        const data: {
+          hora: number;
+          minuto: number;
+          salidas: boolean[];
+        }[][] = await res.json();
 
-      tablaTiempos = data.map(
-        (i) =>
-          new Map(
-            i
-              .filter(({ hora }) => hora !== -1)
-              .map(({ hora, minuto, salidas }) => {
-                let k = `${hora.toString().padStart(2, "0")}:${minuto
-                  .toString()
-                  .padStart(2, "0")}`;
+        tablaTiempos = data.map(
+          (i) =>
+            new Map(
+              i
+                .filter(({ hora }) => hora !== -1)
+                .map(({ hora, minuto, salidas }) => {
+                  let k = `${hora.toString().padStart(2, "0")}:${minuto
+                    .toString()
+                    .padStart(2, "0")}`;
 
-                return [k, salidas];
-              })
-          )
-      );
-    })
-    .catch((err) => {
-      console.error(err);
+                  return [k, salidas];
+                })
+            )
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    fetch("/manual_activado").then(async (res) => {
+      const data: { val: boolean } = await res.json();
+      manualEnabled = data.val;
     });
+  });
 
   function onUpload() {
     fetch("/tiempos", {
@@ -64,6 +74,14 @@
           })
         )
       ),
+    });
+  }
+
+  function clickManual() {
+    manualEnabled = !manualEnabled;
+
+    fetch(manualEnabled ? "/activar_manual" : "/desactivar_manual", {
+      method: "POST",
     });
   }
 </script>
@@ -88,21 +106,30 @@
         }}>Pegar</button
       >
       <div class="flex-1" />
+      <button
+        class="btn-manual"
+        class:enabled={manualEnabled}
+        on:click={clickManual}>Manual</button
+      >
       <button class="btn-upload" on:click={onUpload}>Subir</button>
     </div>
     <span>{copyingId !== -1 ? `Copiando: ${dias[copyingId]}` : ""}</span>
 
     <div class="divider" />
-    {#each dias as _, i}
-      <div style:display={selectedTab === i ? "block" : "none"}>
-        <TablaTiempos
-          {n_tiempos}
-          {n_salidas}
-          entries={tablaTiempos[i]}
-          onUpdate={(entries) => (tablaTiempos[i] = entries)}
-        />
-      </div>
-    {/each}
+    {#if !manualEnabled}
+      {#each dias as _, i}
+        <div style:display={selectedTab === i ? "block" : "none"}>
+          <TablaTiempos
+            {n_tiempos}
+            {salidas}
+            entries={tablaTiempos[i]}
+            onUpdate={(entries) => (tablaTiempos[i] = entries)}
+          />
+        </div>
+      {/each}
+    {:else}
+      <ModoManual {salidas} />
+    {/if}
   </div>
 </main>
 
@@ -164,5 +191,22 @@
 
   .btns .btn-upload:active {
     background: hsl(140, 68%, 34%);
+  }
+
+  .btns .btn-manual {
+    -webkit-tap-highlight-color: #0000;
+    transition: 0.2s;
+  }
+
+  .btns .btn-manual:not(.enabled) {
+    color: hsl(0, 0%, 50%);
+    background: #fff;
+    border: 2px solid hsl(0, 0%, 90%);
+  }
+
+  .btns .btn-manual.enabled {
+    color: hsl(52, 90%, 30%);
+    background: hsl(52, 100%, 85%);
+    border: 2px solid hsl(52, 90%, 40%);
   }
 </style>

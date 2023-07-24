@@ -1,6 +1,6 @@
 <script lang="ts">
   export let n_tiempos: number;
-  export let n_salidas: number;
+  export let salidas: string[];
   export let onUpdate: (entries: Map<string, boolean[]>) => void;
 
   export let entries: Map<string, boolean[]>;
@@ -21,7 +21,7 @@
 
     entries.set(
       value,
-      [...Array(n_salidas)].map((_) => false)
+      salidas.map((_) => false)
     );
     entries = new Map([...entries].sort());
 
@@ -74,8 +74,8 @@
     <input type="time" value="00:00" />
   </div>
 
-  {#each [...Array(n_salidas)].map((_, i) => i) as s}
-    <span class="out mx-auto">out{s}</span>
+  {#each salidas as s}
+    <span class="out mx-auto">{s}</span>
   {/each}
 
   {#each entries as [k, v]}
