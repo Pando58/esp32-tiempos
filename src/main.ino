@@ -22,8 +22,8 @@
 #define OLED_RESET -1
 #define OLED_SCR_ADDR 0x3C
 
-String ssid = "Wifi4us";
-String pswd = "TLWA830RE";
+String ssid = "Alpha Centauri";
+String pswd = "SpaceIsTheFuture2024";
 
 const char* ntp_server = "pool.ntp.org";
 const long gmt_offset_sec = -6 * 3600;
