@@ -15,7 +15,7 @@
   ];
 
   const n_tiempos = 10;
-  const salidas = ["bomba", "val1", "val2"];
+  const salidas = ["bomba", "1", "2", "3", "4", "5", "6"];
 
   let tablaTiempos: Map<string, boolean[]>[] = [...Array(dias.length)].map(
     () => new Map()

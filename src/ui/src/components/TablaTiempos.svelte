@@ -66,7 +66,7 @@
   }
 </script>
 
-<div class="table">
+<div class="table max-w-fit">
   <div class="filler col-time">
     <button class="btn-delete">x</button>
   </div>
@@ -158,7 +158,7 @@
 
   .table {
     display: grid;
-    grid-template-columns: fit-content(1px) fit-content(1px) 1fr 1fr 1fr;
+    grid-template-columns: fit-content(1px) fit-content(1px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 
   .filler {

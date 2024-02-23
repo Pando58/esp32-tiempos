@@ -11,11 +11,15 @@
 
 #define n_dias 7
 #define n_tiempos 10
-#define n_salidas 3
+#define n_salidas 7
 
 #define out1 2
-#define out2 0
-#define out3 4
+#define out2 4
+#define out3 16
+#define out4 17
+#define out5 5
+#define out6 18
+#define out7 19
 
 #define OLED_W 128
 #define OLED_H 64
@@ -47,10 +51,18 @@ void setup() {
   pinMode(out1, OUTPUT);
   pinMode(out2, OUTPUT);
   pinMode(out3, OUTPUT);
+  pinMode(out4, OUTPUT);
+  pinMode(out5, OUTPUT);
+  pinMode(out6, OUTPUT);
+  pinMode(out7, OUTPUT);
 
   digitalWrite(out1, LOW);
   digitalWrite(out2, LOW);
   digitalWrite(out3, LOW);
+  digitalWrite(out4, LOW);
+  digitalWrite(out5, LOW);
+  digitalWrite(out6, LOW);
+  digitalWrite(out7, LOW);
 
   for (int i = 0; i < n_dias; i++) {
     for (int j = 0; j < n_tiempos; j++) {
@@ -222,6 +234,10 @@ void setup() {
       if (entry == 0) { digitalWrite(out1, value); }
       if (entry == 1) { digitalWrite(out2, value); }
       if (entry == 2) { digitalWrite(out3, value); }
+      if (entry == 3) { digitalWrite(out4, value); }
+      if (entry == 4) { digitalWrite(out5, value); }
+      if (entry == 5) { digitalWrite(out6, value); }
+      if (entry == 6) { digitalWrite(out7, value); }
 
       request->send(200);
   });
@@ -250,10 +266,18 @@ void loop() {
         outState[0] = tabla_tiempos[wday][i][2] == 1;
         outState[1] = tabla_tiempos[wday][i][3] == 1;
         outState[2] = tabla_tiempos[wday][i][4] == 1;
+        outState[3] = tabla_tiempos[wday][i][5] == 1;
+        outState[4] = tabla_tiempos[wday][i][6] == 1;
+        outState[5] = tabla_tiempos[wday][i][7] == 1;
+        outState[6] = tabla_tiempos[wday][i][8] == 1;
 
         digitalWrite(out1, tabla_tiempos[wday][i][2] == 1 ? HIGH : LOW);
         digitalWrite(out2, tabla_tiempos[wday][i][3] == 1 ? HIGH : LOW);
         digitalWrite(out3, tabla_tiempos[wday][i][4] == 1 ? HIGH : LOW);
+        digitalWrite(out4, tabla_tiempos[wday][i][5] == 1 ? HIGH : LOW);
+        digitalWrite(out5, tabla_tiempos[wday][i][6] == 1 ? HIGH : LOW);
+        digitalWrite(out6, tabla_tiempos[wday][i][7] == 1 ? HIGH : LOW);
+        digitalWrite(out7, tabla_tiempos[wday][i][8] == 1 ? HIGH : LOW);
 
         break;
       }
