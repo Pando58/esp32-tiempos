@@ -18,6 +18,7 @@
 in pkgs.mkShell {
   buildInputs = with pkgs; [
     platformio
+    nodejs_20
     # arduino-cli
     # arduino-language-server
     # (python3.withPackages(ps: [

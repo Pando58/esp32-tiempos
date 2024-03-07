@@ -11,19 +11,33 @@
 
 #define n_dias 7
 #define n_tiempos 10
-#define n_salidas 3
+#define n_salidas 7
 
-#define out1 2
-#define out2 0
-#define out3 4
+#define out1 12
+#define out2 14
+#define out3 27
+#define out4 26
+#define out5 25
+#define out6 33
+#define out7 32
 
 #define OLED_W 128
 #define OLED_H 64
-#define OLED_RESET -1
-#define OLED_SCR_ADDR 0x3C
+// #define OLED_RESET -1
+// #define OLED_SCR_ADDR 0x3C
 
-String ssid = "Alpha Centauri";
-String pswd = "SpaceIsTheFuture2024";
+#define OLED_CLK   18
+#define OLED_MOSI  5
+#define OLED_RESET 17
+#define OLED_DC    16
+#define OLED_CS    4
+
+// #define OLED_CS     15
+// #define OLED_DC     27
+// #define OLED_RESET  26
+
+String ssid = "Wifi4us";
+String pswd = "TLWA830RE";
 
 const char* ntp_server = "pool.ntp.org";
 const long gmt_offset_sec = -6 * 3600;
@@ -35,7 +49,11 @@ bool manualEnabled = false;
 bool outState[n_salidas];
 
 AsyncWebServer server(80);
-Adafruit_SSD1306 display(OLED_W, OLED_H, &Wire, OLED_RESET);
+
+// Adafruit_SSD1306 display(OLED_W, OLED_H, &Wire, OLED_RESET);
+Adafruit_SSD1306 display(OLED_W, OLED_H, OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
+// Adafruit_SSD1306 display(OLED_W, OLED_H, &SPI, OLED_DC, OLED_RESET, OLED_CS);
+
 struct tm tm_update_time;
 struct tm tm_now;
 String ip;
@@ -47,10 +65,18 @@ void setup() {
   pinMode(out1, OUTPUT);
   pinMode(out2, OUTPUT);
   pinMode(out3, OUTPUT);
+  pinMode(out4, OUTPUT);
+  pinMode(out5, OUTPUT);
+  pinMode(out6, OUTPUT);
+  pinMode(out7, OUTPUT);
 
   digitalWrite(out1, LOW);
   digitalWrite(out2, LOW);
   digitalWrite(out3, LOW);
+  digitalWrite(out4, LOW);
+  digitalWrite(out5, LOW);
+  digitalWrite(out6, LOW);
+  digitalWrite(out7, LOW);
 
   for (int i = 0; i < n_dias; i++) {
     for (int j = 0; j < n_tiempos; j++) {
@@ -64,7 +90,8 @@ void setup() {
 
   Serial.begin(115200);
 
-  if(!display.begin(SSD1306_SWITCHCAPVCC, OLED_SCR_ADDR)) { // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  // if(!display.begin(SSD1306_SWITCHCAPVCC, OLED_SCR_ADDR)) { // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  if(!display.begin(SSD1306_SWITCHCAPVCC)) { // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
     Serial.println(F("SSD1306 allocation failed"));
     for(;;);
   }
@@ -222,6 +249,10 @@ void setup() {
       if (entry == 0) { digitalWrite(out1, value); }
       if (entry == 1) { digitalWrite(out2, value); }
       if (entry == 2) { digitalWrite(out3, value); }
+      if (entry == 3) { digitalWrite(out4, value); }
+      if (entry == 4) { digitalWrite(out5, value); }
+      if (entry == 5) { digitalWrite(out6, value); }
+      if (entry == 6) { digitalWrite(out7, value); }
 
       request->send(200);
   });
@@ -250,10 +281,18 @@ void loop() {
         outState[0] = tabla_tiempos[wday][i][2] == 1;
         outState[1] = tabla_tiempos[wday][i][3] == 1;
         outState[2] = tabla_tiempos[wday][i][4] == 1;
+        outState[3] = tabla_tiempos[wday][i][5] == 1;
+        outState[4] = tabla_tiempos[wday][i][6] == 1;
+        outState[5] = tabla_tiempos[wday][i][7] == 1;
+        outState[6] = tabla_tiempos[wday][i][8] == 1;
 
         digitalWrite(out1, tabla_tiempos[wday][i][2] == 1 ? HIGH : LOW);
         digitalWrite(out2, tabla_tiempos[wday][i][3] == 1 ? HIGH : LOW);
         digitalWrite(out3, tabla_tiempos[wday][i][4] == 1 ? HIGH : LOW);
+        digitalWrite(out4, tabla_tiempos[wday][i][5] == 1 ? HIGH : LOW);
+        digitalWrite(out5, tabla_tiempos[wday][i][6] == 1 ? HIGH : LOW);
+        digitalWrite(out6, tabla_tiempos[wday][i][7] == 1 ? HIGH : LOW);
+        digitalWrite(out7, tabla_tiempos[wday][i][8] == 1 ? HIGH : LOW);
 
         break;
       }

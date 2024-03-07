@@ -58,7 +58,13 @@
 
   function onOutChange(checked: boolean, index: number, entry: string) {
     let arr = entries.get(entry);
+
     arr[index] = checked;
+
+    if (!arr.includes(true, 1)) {
+      arr[0] = false;
+    }
+
     entries.set(entry, arr);
     entries = entries;
 
@@ -66,7 +72,7 @@
   }
 </script>
 
-<div class="table">
+<div class="table max-w-fit">
   <div class="filler col-time">
     <button class="btn-delete">x</button>
   </div>
@@ -78,7 +84,7 @@
     <span class="out mx-auto">{s}</span>
   {/each}
 
-  {#each entries as [k, v]}
+  {#each [...entries] as [k, v]}
     <div>
       <button class="btn-delete" on:click={() => deleteEntry(k)}>x</button>
     </div>
@@ -158,7 +164,7 @@
 
   .table {
     display: grid;
-    grid-template-columns: fit-content(1px) fit-content(1px) 1fr 1fr 1fr;
+    grid-template-columns: fit-content(1px) fit-content(1px) 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 
   .filler {

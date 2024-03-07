@@ -5,7 +5,20 @@
 
   let values = salidas.map((_) => false);
 
-  $: console.log(values);
+  $: if (!values.includes(true, 1)) {
+    values[0] = false;
+
+    fetch("/manual", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        entry: 0,
+        value: false,
+      }),
+    });
+  };
 
   onMount(() => {
     fetch("/manual").then(async (res) => {
@@ -81,7 +94,7 @@
 
   .table {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 
   .out {
